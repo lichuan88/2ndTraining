@@ -184,7 +184,7 @@ console.log(filteredArray); // 输出：[3, 4, 5]
 > >
 > > 
 > >
-> > 2. async和await :在async函数内，使用await关键字，获取Promise对象"成功状态“结果值,: await必须用在async修饰的函数内，await会阻止"异步函数内”代码继续执行，原地等待结果（简单理解就是async表示异步，但是await会等待此行代码，返回成功之后继续向下执行代码）
+> > 2. async和await :在async函数内，使用await关键字，获取Promise对象"成功状态“结果值, await必须用在async修饰的函数内，await会阻止"异步函数内”代码继续执行，原地等待结果（简单理解就是async表示异步，但是await会等待此行代码，返回成功之后继续向下执行代码）
 > >
 > > ``` js
 > > const getArtChannalList = async () => {
