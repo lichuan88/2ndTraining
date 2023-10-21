@@ -10,6 +10,8 @@ const {name,age}=user
 console.log(name,age) //张三，2
 ```
 
+
+
 ### 模板字符串
 
 ```js
@@ -18,6 +20,8 @@ const age=20
 const all=`${name}今年${age}岁`
 console.log(all) //李四今年20岁
 ```
+
+
 
 ### 展开运算符
 
@@ -34,6 +38,8 @@ const chars = [...str];
 console.log(chars); //["h", "e", "l", "l", "o"]
 ```
 
+
+
 ### 剩余操作符
 
 ```js
@@ -42,6 +48,8 @@ console.log(a); // 输出：1
 console.log(b); // 输出：2
 console.log(rest); // 输出：[3, 4, 5]
 ```
+
+
 
 ### 箭头函数
 
@@ -54,6 +62,8 @@ const sum = (a, b) => {
 
 console.log(sum(1, 2)); // 输出：3
 ```
+
+
 
 ### 操作数组
 
@@ -95,3 +105,94 @@ const filteredArray = array.filter(element => element > 2);
 console.log(filteredArray); // 输出：[3, 4, 5]
 ```
 
+
+
+### 可选链
+
+> 特点：
+>
+> 通过 `?.` 操作符来访问可能不存在的属性或方法，避免在访问这些不存在的属性或方法时导致程序崩溃
+>
+> 可选链可以更加轻松地处理对象、函数或数组中存在潜在缺失的属性和方法，减少冗长的条件判断代码，并提高了代码的可读性和可维护性。
+>
+> 演示：
+>
+> ``` js
+> const obj={
+>     prop1:{
+>         prop2:{
+>             method:()=>{
+>                 console.log('Hello')
+>             }
+>         }
+>     }
+> }
+> // 使用可选链调用方法
+> obj?.prop1?.prop2?.method?.(); // 输出：Hello ; 
+> console.log(obj?.prop1?.prop3); // 输出：undefined
+> //tip:访问不存在的属性或者方法时，不会抛出错误，而是返回undefined
+> ```
+>
+> 
+
+
+
+### Promise
+
+> Promise对象用来管理异步操作的代码，可以获取异步操作成功或者失败的结果
+>
+> ``` js
+> //promise对象的回调函数里面执行异步代码，成功调用resolve方法，失败调用reject方法，分别触发then和catch里面的回调函数
+> const p=new Promise((resolve,reject)=>{
+>   setTimeout(()=>{
+>       resolve('模拟成功请求')
+>       //reject('模拟失败请求')
+>   }，2000)
+> })
+> 
+> p.then(result=>{
+>     console.log(result) //输出：模拟成功请求
+> }).catch(error=>{
+>     console.log(error) //输出：模拟失败请求
+> })
+> ```
+>
+> 
+>
+> Primise对象的三种状态：
+>
+> + 刚开始创建Promise对象 （pending-待定）
+> + 异步操作成功调用resolve（fulfilled-已兑现）
+> + 异步操作失败调用reject（rejected-已拒绝）
+>
+> 
+>
+> 为了解决Promise回调函数地狱的问题，有两种方法
+>
+> > 1. 链式调用：通过promise对象的resolve可以return出一个新的Promise对象来解决回调函数的嵌套
+> >
+> > ``` js
+> > axios.({url:'xxxxx'}).then(result=>{
+> >     pname=result.data.list[0]
+> >     某个元素.innerHTML=pname
+> >     return axios({url:'sssss',params:{pname}})
+> > }).then(result=>{
+> >     const cname=result.data.list[0]
+> >     某个元素.innerHTML=cname
+> > })
+> > ```
+> >
+> > 
+> >
+> > 2. async和await :在async函数内，使用await关键字，获取Promise对象"成功状态“结果值,: await必须用在async修饰的函数内，await会阻止"异步函数内”代码继续执行，原地等待结果（简单理解就是async表示异步，但是await会等待此行代码，返回成功之后继续向下执行代码）
+> >
+> > ``` js
+> > const getArtChannalList = async () => {
+> >   loading.value = true
+> >   const res = await artGetChannelService()
+> >   channelList.value = res.data.data
+> >   loading.value = false
+> > }
+> > ```
+> >
+> > 
