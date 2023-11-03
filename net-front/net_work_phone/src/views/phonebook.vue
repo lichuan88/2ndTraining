@@ -1,7 +1,88 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
+import {
+  admins,
+  dormitories,
+  recadminlist,
+  identity_cards,
+  adminer,
+  identity_List,
+} from "../types/response-data";
+import {
+  GetIndentityCards,
+  GetIndentityList,
+  // GetNetAdmin,
+  GetRecAdmin,
+} from "../api/methods/netadmin";
+import { useRequest } from "alova";
+const dormitories = ref<dormitories[]>();
+const admins = ref<admins[]>();
 const activeName = ref("1");
 const openDialog = ref<boolean>(false);
+const currentAdmin = ref(""); //对话框中名字
+const recadminlists = ref<recadminlist>({
+  grade1: "",
+  grade2: "",
+});
+//获取网管列表
+// const { onSuccess: GetNetAdminSuccess } = useRequest(() => GetNetAdmin());
+// GetNetAdminSuccess((response) => {
+//   dormitories.value = response.data.data;
+//   console.log(dormitories.value);
+// });
+//获取推荐网管列表
+const { onSuccess: GetRecAdminSuccess } = useRequest(() => GetRecAdmin());
+GetRecAdminSuccess((response) => {
+  recadminlists.value = response.data.data;
+  console.log(recadminlists.value);
+});
+//获取网管列表  下拉框列表
+const IdentityCards = ref<identity_cards[]>();
+const { onSuccess: GetIndentityCardsSuccess } = useRequest(() =>
+  GetIndentityCards()
+);
+GetIndentityCardsSuccess((response) => {
+  IdentityCards.value = response.data.data;
+  console.log(IdentityCards.value);
+});
+////获取身份组中 点开下拉框 获取卡片
+const adminers = ref<adminer[]>([]);
+const IdentityList = ref<identity_List>({
+  identity_group_id: "",
+  identity_group: "",
+  admins: [],
+});
+const { onSuccess, send: updateIdentityList } = useRequest(
+  (id: string) => GetIndentityList(id),
+  {
+    immediate: false,
+    shareRequest: false,
+    cache: false,
+  }
+);
+//下拉后 调用函数
+const handleChange = (id: string) => {
+  updateIdentityList(id);
+};
+onSuccess((response) => {
+  IdentityList.value = response.data.data;
+  adminers.value = IdentityList.value.admins;
+  console.log(IdentityList.value);
+});
+onMounted(() => {
+  // 不需要手动添加事件监听器
+});
+//电话
+const callnumber = ref<string>("");
+const callshortnumber = ref<string | undefined>("");
+const callnumberherf = ref(`tel:${callnumber}`);
+const callshortnumberherf = ref(`tel:${callshortnumber}`);
+const smsnumberherf = ref(`sms:${callnumber}`);
+watch([callnumber, callshortnumber], () => {
+  callnumberherf.value = `tel:${callnumber.value}`;
+  callshortnumberherf.value = `tel:${callshortnumber.value}`;
+  smsnumberherf.value = `sms:${callnumber.value}`;
+});
 </script>
 <template>
   <div class="w-full justify-center flex mt-20">
@@ -9,24 +90,62 @@ const openDialog = ref<boolean>(false);
       <div class="w-full flex justify-center items-center flex-col mb-2">
         <p style="font-size: 20px; color: #3396db">网管通讯录</p>
         <p>温馨提示： 点击人员自动拨号</p>
-        <p class="text-red">请优先寻找21，22级网管</p>
+        <p class="text-red">
+          请优先寻找{{ recadminlists.grade1 }},{{ recadminlists.grade2 }}级网管
+        </p>
       </div>
-      <div class="w-full">
-        <el-collapse v-model="activeName" accordion>
+      <div class="w-full mt-10 mb-25">
+        <el-collapse
+          v-model="activeName"
+          accordion
+          v-for="card in IdentityCards"
+          :key="card.identity_group"
+          class="w-full"
+        >
           <el-collapse-item
-            title="移动工作人员"
-            name="1"
-            class="justify-center"
+            :name="card.identity_group"
+            class="w-full"
+            :title="card.identity_group"
+            @click="handleChange(card.identity_group_id)"
           >
+            <template #title>
+              <img
+                src="../img/分组.png"
+                alt=""
+                style="width: 15px; height: 15px; margin-right: 10px"
+              />
+              {{ card.identity_group }}
+            </template>
             <el-card
               shadow="always"
-              class="w-80% mt-2 rounded-5"
-              @click="() => (openDialog = true)"
+              class="w-80% mt-2 rounded-5 mx-auto"
+              @click="
+                () => {
+                  currentAdmin = admin.admin; //传值给对话框
+                  callnumber = admin.phone;
+                  callshortnumber = admin.short_number;
+                  console.log(callnumber);
+                  console.log(callnumberherf);
+                  openDialog = true;
+                }
+              "
+              v-for="admin in adminers"
+              :key="admin.admin"
             >
               <div class="flex justify-between items-center w-80p h-1">
-                <span>移动人员1</span><span>2022</span>
-              </div></el-card
-            >
+                <div class="flex justify-between items-center h-1">
+                  <img
+                    src="../img/人员.png"
+                    alt=""
+                    style="width: 15px; height: 15px; margin-right: 10px"
+                  />
+                  <div>
+                    <span>{{ admin.admin }}</span>
+                  </div>
+                </div>
+                <span>{{ admin.grade }}</span>
+              </div>
+            </el-card>
           </el-collapse-item>
         </el-collapse>
       </div>
@@ -42,17 +161,46 @@ const openDialog = ref<boolean>(false);
     <template #header>
       <div class="w-full flex justify-center items-end h-35px">
         <div><h2>联系提醒</h2></div>
-        <!-- <el-button type="danger" plain class="ml-auto">删除网管</el-button> -->
       </div>
     </template>
     <div class="mb-15px flex justify-center">
       <h3>即将联系 网管</h3>
-      <h3>(黄文杰)</h3>
+      <h3>({{ currentAdmin }})</h3>
     </div>
     <div class="flex w-full">
-      <el-button type="primary" plain class="flex-grow">长号</el-button>
-      <el-button type="primary" plain class="flex-grow">短号</el-button>
-      <el-button type="primary" plain class="flex-grow">短信</el-button>
+      <el-button
+        type="primary"
+        plain
+        class="flex-grow"
+        @click="
+          {
+            console.log(callnumberherf);
+          }
+        "
+        ><a :href="callnumberherf">长号</a></el-button
+      >
+      <el-button
+        type="primary"
+        plain
+        class="flex-grow"
+        @click="
+          {
+            console.log(callshortnumberherf);
+          }
+        "
+        ><a :href="callshortnumberherf">短号</a></el-button
+      >
+      <el-button
+        type="primary"
+        plain
+        class="flex-grow"
+        @click="
+          {
+            console.log(smsnumberherf);
+          }
+        "
+        ><a :href="smsnumberherf">短信</a></el-button
+      >
       <el-button
         type="primary"
         plain
@@ -64,7 +212,7 @@ const openDialog = ref<boolean>(false);
   </el-dialog>
 </template>
 <style scoped>
-/* .no-border .el-dialog_wrapper {
-  border: none !important;
-} */
+a {
+  text-decoration: none;
+}
 </style>

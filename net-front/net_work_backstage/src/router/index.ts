@@ -13,10 +13,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import("../views/backstage.vue"),
       },
       {
-        path: "admindetail",
-        //:id
-        name: "admindetail",
-        component: () => import("../views/admindetail.vue"),
+        path: "/admin",
+        children: [
+          {
+            path: ":id",
+            name: "admindetail",
+            component: () => import("../views/admindetail.vue"),
+          },
+        ],
       },
     ],
   },

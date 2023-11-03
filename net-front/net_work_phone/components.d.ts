@@ -19,6 +19,7 @@ declare module 'vue' {
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElFooter: typeof import('element-plus/es')['ElFooter']
     ElHeader: typeof import('element-plus/es')['ElHeader']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElMain: typeof import('element-plus/es')['ElMain']
     Fb: typeof import('./src/components/fb.vue')['default']
     Foot: typeof import('./src/components/foot.vue')['default']

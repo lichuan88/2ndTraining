@@ -19,7 +19,7 @@
   bottom: 0px;
 }
 p {
-  font-size: 5px;
+  font-size: 14px;
   color: aliceblue;
 }
 </style>
