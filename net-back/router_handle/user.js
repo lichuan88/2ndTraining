@@ -5,7 +5,8 @@ const jwt = require("jsonwebtoken");
 // 导入配置文件
 const config = require("../config");
 const pool = mysql.createPool({
-  host: "localhost",
+  host: "43.139.169.119",
+  port: 3307,
   user: "root",
   password: "280010",
   database: "net_admin_phone-book",
@@ -278,10 +279,10 @@ function recommendadmin(user) {
     }
   });
 }
-//获取token
-exports.getToken = (req, res) => {
+// 登录 账号
+exports.LoginSystem = (req, res) => {
   const user = req.body;
-  Gettoken(user)
+  loginSystem(user)
     .then((rows) => {
       res.json(rows);
     })
@@ -290,21 +291,31 @@ exports.getToken = (req, res) => {
       console.log(error);
     });
 };
-function Gettoken(user) {
+function loginSystem(user) {
   return new Promise(async (resolve, reject) => {
     try {
-      /* const connection = await pool.getConnection();
-      const [rows, fields] = await connection.execute(sqlsentence.recommendsql); 
-      connection.release();*/
-      if (user.username == "admin" && user.password == "000000") {
+      const connection = await pool.getConnection();
+      const [rows, fields] = await connection.execute(sqlsentence.loginsql, [
+        user.admin_id,
+      ]);
+      console.log(rows);
+      connection.release();
+      if (user.admin_password === rows[0].admin_password) {
         const tokenStr = jwt.sign(user, config.jwtSecretKey, {
           expiresIn: config.expiresIn, // token 有效期为 10 个小时
         });
-        console.log(tokenStr);
         const formattedData = {
           code: 200,
-          message: "获取token成功",
-          token: "Bearer " + tokenStr,
+          message: "获取token成功,登录成功",
+          data: { token: "Bearer " + tokenStr, user_name: rows[0].admin_name },
+        };
+        console.log(tokenStr);
+        resolve(formattedData);
+      } else {
+        const formattedData = {
+          code: 200,
+          message: "密码错误",
+          token: "",
         };
         resolve(formattedData);
       }

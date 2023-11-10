@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+// import { useStore } from "../../store";
+// const store = useStore();
+const user_name = localStorage.getItem("user_name");
+</script>
 <template>
   <div
     class="h-55px flex items-center bg-[#252830] w-full justify-between"
@@ -10,10 +14,11 @@
     </div>
     <div style="margin-right: 20px; display: flex">
       <img src="../../img/human.png" alt="" class="img2" />
-      <h3 style="color: aliceblue">黄文杰</h3>
+      <h3 style="color: aliceblue">{{ user_name }}</h3>
     </div>
   </div>
 </template>
+
 <style scoped>
 .img1 {
   width: 23px;

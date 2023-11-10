@@ -7,7 +7,7 @@
 </template>
 <style scoped>
 .footer {
-  background-color: #0c7ed9;
+  background-color: #405779;
   display: flex;
   justify-content: center;
   align-items: center;

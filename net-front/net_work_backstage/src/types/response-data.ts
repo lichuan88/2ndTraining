@@ -24,3 +24,7 @@ export interface adminer {
   short_number?: string;
   identity_group: string;
 }
+export interface loginget {
+  token: string;
+  user_name: string;
+}

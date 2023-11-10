@@ -85,10 +85,17 @@ watch([callnumber, callshortnumber], () => {
 });
 </script>
 <template>
-  <div class="w-full justify-center flex mt-20">
+  <div class="w-full justify-center flex pt-20 contianer">
     <div class="w-80%">
-      <div class="w-full flex justify-center items-center flex-col mb-2">
-        <p style="font-size: 20px; color: #3396db">网管通讯录</p>
+      <div
+        class="w-80% flex justify-center items-center flex-col mb-1 p-2"
+        style="
+          background-color: rgb(234, 240, 245);
+          margin: auto;
+          border-radius: 5px;
+        "
+      >
+        <p style="font-size: 15px; color: #405779">网管通讯录</p>
         <p>温馨提示： 点击人员自动拨号</p>
         <p class="text-red">
           请优先寻找{{ recadminlists.grade1 }},{{ recadminlists.grade2 }}级网管
@@ -107,14 +114,20 @@ watch([callnumber, callshortnumber], () => {
             class="w-full"
             :title="card.identity_group"
             @click="handleChange(card.identity_group_id)"
+            style="margin-bottom: 1px; border-radius: 10px"
           >
             <template #title>
               <img
                 src="../img/分组.png"
                 alt=""
-                style="width: 15px; height: 15px; margin-right: 10px"
+                style="
+                  width: 15px;
+                  height: 15px;
+                  margin-right: 10px;
+                  margin-left: 10px;
+                "
               />
-              {{ card.identity_group }}
+              <h3>{{ card.identity_group }}</h3>
             </template>
             <el-card
               shadow="always"
@@ -214,5 +227,20 @@ watch([callnumber, callshortnumber], () => {
 <style scoped>
 a {
   text-decoration: none;
+}
+p {
+  margin-bottom: 2px;
+  font-size: 15px;
+}
+.contianer {
+  background-image: url("../img/hgxywLogo_01.png");
+  background-repeat: no-repeat;
+  background-position: 50px 50px;
+  background-attachment: fixed;
+  background-size: 2 80%;
+}
+.el-collapse-item__content {
+  background-color: black !important;
+  font-size: large;
 }
 </style>

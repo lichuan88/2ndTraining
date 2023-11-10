@@ -17,9 +17,7 @@ const deladmin = ref(""); // 删除网管
 const deldialogVisible = ref(false); //删除网管对话框
 const adminers = ref<adminer[]>([]);
 const count = ref(); //网管人数
-/* watch(
-  ()
-) */
+
 //获取身份组中
 const { onSuccess, send: updateIdentityList } = useRequest(
   (id: string) => GetIndentityList(id),
@@ -61,7 +59,6 @@ const deleteRow = async (admin: string) => {
   try {
     await updatedeladmin(admin);
     console.log(id);
-    // 等待 updatedeladmin(admin) 完成后立即执行 updateIdentityList(id)
     await updateIdentityList(id);
     console.log(111111);
   } catch (error) {
@@ -134,6 +131,7 @@ const deleteRow = async (admin: string) => {
       </el-table-column>
     </el-table>
   </section>
+
   <AddAdmin
     :open="openDialog"
     title="增加网管"
@@ -147,6 +145,7 @@ const deleteRow = async (admin: string) => {
     "
     :identityGroupIdValue="id"
   />
+
   <el-dialog v-model="deldialogVisible" title="删除网管" width="30%">
     <span>确定要删除该网管</span>
     <template #footer>

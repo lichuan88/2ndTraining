@@ -2,10 +2,10 @@
 import { createAlova } from "alova";
 import GlobalFetch from "alova/GlobalFetch";
 import vueHook from "alova/vue";
-export const ACCESS_TOKEN =
-  "Bearer " +
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicGFzc3dvcmQiOiIwMDAwMDAiLCJpYXQiOjE2OTkwMTQ2ODUsImV4cCI6MTY5OTA1MDY4NX0.vLe6MYWVZRguykzxl4OM0ZV4lqMTXGUAUSBA0RYYzvg";
-
+const token = localStorage.getItem("token");
+// export const ACCESS_TOKEN =
+//   "Bearer " +
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6IjQ1NjY1NCIsImFkbWluX3Bhc3N3b3JkIjoiMTIzNDU2IiwiaWF0IjoxNjk5NjM0Mjg1LCJleHAiOjE2OTk2NzAyODV9.at7-Sf9FO6BgGnI7_tOc0slCLMp0Qs-ytZmUG_4yToc";
 export const testURL = "http://127.0.0.1:8880";
 export const testAlova = createAlova({
   baseURL: testURL,
@@ -17,7 +17,7 @@ export const testAlova = createAlova({
   beforeRequest(method) {
     method.config.headers = {
       "content-type": "application/json",
-      Authorization: ACCESS_TOKEN,
+      Authorization: token,
     };
   },
   // 响应钩子，相当于 axios 的响应拦截器，因为用的是 fetch api 作为请求适配器，因此我们这里把响应数据转化为json格式返回出去

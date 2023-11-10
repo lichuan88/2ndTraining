@@ -9,7 +9,7 @@
       background-color="#545c64"
       text-color="#fff"
     >
-      <el-menu-item index="/back">
+      <el-menu-item index="/index/back">
         <h3>网管列表</h3>
       </el-menu-item>
     </el-menu>

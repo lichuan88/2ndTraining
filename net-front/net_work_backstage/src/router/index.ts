@@ -2,10 +2,10 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    component: () => import("../views/index.vue"),
+    component: () => import("../views/login.vue"),
   },
   {
-    path: "/",
+    path: "/index",
     component: () => import("../views/index.vue"),
     children: [
       {
@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import("../views/backstage.vue"),
       },
       {
-        path: "/admin",
+        path: "admin",
         children: [
           {
             path: ":id",

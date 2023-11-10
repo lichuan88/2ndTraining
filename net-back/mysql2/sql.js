@@ -21,3 +21,5 @@ exports.deladminsql = "DELETE FROM `net_work` WHERE `admin` = ?;";
 // 推荐最新两届网管
 exports.recommendsql =
   "SELECT DISTINCT grade FROM net_work ORDER BY grade DESC LIMIT 2;";
+//登录账号
+exports.loginsql = "SElECT * FROM admin WHERE admin_id = ?";
